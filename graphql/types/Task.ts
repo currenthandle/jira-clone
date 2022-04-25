@@ -1,3 +1,4 @@
+import { argsToArgsConfig } from "graphql/type/definition";
 import { objectType, extendType, stringArg, nonNull, intArg } from "nexus";
 import { User } from "./user";
 
@@ -44,6 +45,68 @@ export const TaskQuery = extendType({
           where: {
             userId: args.userId,
           },
+        });
+      },
+    });
+  },
+});
+
+export const TaskMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    // create new task
+    t.nonNull.field("createTask", {
+      type: "Task",
+      args: {
+        title: nonNull(stringArg()),
+        description: nonNull(stringArg()),
+        userId: stringArg(),
+        id: args.id,
+        status: args.status,
+      },
+      resolve(_root, args, ctx) {
+        return ctx.prisma.task.create({
+          data: {
+            title: args.title,
+            description: args.description,
+            userId: args.userId,
+            id: args.id,
+            status: args.status,
+          },
+        });
+      },
+    });
+    // update a task by id
+    t.field("updateTask", {
+      type: "Task",
+      args: {
+        id: nonNull(stringArg()),
+        title: stringArg(),
+        description: stringArg(),
+        userId: stringArg(),
+        status: stringArg(),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.prisma.task.update({
+          where: { id: args.id },
+          data: {
+            title: args.title,
+            description: args.description,
+            userId: args.userId,
+            status: args.status,
+          },
+        });
+      },
+    });
+    // delete a task by id
+    t.field("deleteTask", {
+      type: "Task",
+      args: {
+        id: nonNull(stringArg()),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.prisma.task.delete({
+          where: { id: args.id },
         });
       },
     });

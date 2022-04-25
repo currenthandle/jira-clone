@@ -6,6 +6,7 @@ export const Task = objectType({
   name: "Task",
   definition(t) {
     t.string("id");
+    t.string("createdAt");
     t.string("title");
     t.string("description");
     t.string("status");
@@ -61,8 +62,8 @@ export const TaskMutation = extendType({
         title: nonNull(stringArg()),
         description: nonNull(stringArg()),
         userId: stringArg(),
-        id: args.id,
-        status: args.status,
+        id: stringArg(),
+        status: stringArg(),
       },
       resolve(_root, args, ctx) {
         return ctx.prisma.task.create({

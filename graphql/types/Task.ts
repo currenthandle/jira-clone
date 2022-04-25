@@ -1,6 +1,6 @@
 import { argsToArgsConfig } from "graphql/type/definition";
 import { objectType, extendType, stringArg, nonNull, intArg } from "nexus";
-import { User } from "./user";
+import { User } from "./User";
 
 export const Task = objectType({
   name: "Task",
